@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Encuentra tu Célula</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="bg-gradient"></div>
+
+  <!-- ============================================ -->
+  <!-- VISTA PRINCIPAL -->
+  <!-- ============================================ -->
+  <div class="container" id="mainView">
+    <header class="header">
+      <div class="logo-area">
+        <i class="fa-solid fa-people-group"></i>
+      </div>
+      <h1>Encuentra tu Célula</h1>
+      <p>Selecciona una célula para conocer su horario, ubicación y datos de contacto</p>
+    </header>
+
+    <div class="search-section">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchInput" placeholder="Buscar célula, persona, día, lugar..." autocomplete="off">
+      </div>
+      <div class="filters">
+        <button class="filter-btn active" data-filter="todos">
+          <i class="fa-solid fa-layer-group"></i> Todos
+        </button>
+        <button class="filter-btn" data-filter="Jueves">
+          <i class="fa-solid fa-calendar-day"></i> Jueves
+        </button>
+        <button class="filter-btn" data-filter="Sábado">
+          <i class="fa-solid fa-calendar-day"></i> Sábados
+        </button>
+        <button class="filter-btn" data-filter="Domingo">
+          <i class="fa-solid fa-calendar-day"></i> Domingos
+        </button>
+        <button class="location-btn" id="locationBtn">
+          <i class="fa-solid fa-location-crosshairs"></i> Usar mi ubicación
+        </button>
+      </div>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid"></div>
+
+    <div class="no-results" id="noResults" style="display:none;">
+      <div class="no-results-icon">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </div>
+      <h3>No se encontraron células</h3>
+      <p>Intenta con otro término de búsqueda o filtro diferente</p>
+    </div>
+
+    <footer class="main-footer">
+      <p>Hecho con <i class="fa-solid fa-heart"></i> para la comunidad</p>
+    </footer>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- VISTA DE DETALLE -->
+  <!-- ============================================ -->
+  <div class="detail-view" id="detailView">
+    <div class="detail-header" id="detailHeader">
+      <button class="back-btn" id="backBtn">
+        <i class="fa-solid fa-arrow-left"></i> Volver a células
+      </button>
+      <h2 class="detail-title" id="detailTitle"></h2>
+      <p class="detail-subtitle" id="detailSubtitle"></p>
+    </div>
+
+    <div class="detail-content">
+      <!-- Horario -->
+      <div class="detail-section">
+        <h3><i class="fa-regular fa-clock"></i> Horario</h3>
+        <div class="detail-info-box" id="detailHorario"></div>
+      </div>
+
+      <!-- Dirección -->
+      <div class="detail-section">
+        <h3><i class="fa-solid fa-location-dot"></i> Dirección</h3>
+        <div class="detail-info-box" id="detailDireccion"></div>
+      </div>
+
+      <!-- Referencia -->
+      <div class="detail-section">
+        <h3><i class="fa-solid fa-map-pin"></i> Punto de Referencia</h3>
+        <div class="detail-info-box" id="detailReferencia"></div>
+      </div>
+
+      <!-- Contactos -->
+      <div class="detail-section">
+        <h3><i class="fa-solid fa-address-book"></i> Contactos</h3>
+        <ul class="contact-list" id="detailContactos"></ul>
+      </div>
+
+      <!-- Mapa -->
+      <div class="map-section">
+        <h3><i class="fa-solid fa-map"></i> Ubicación</h3>
+        <div class="map-container" id="mapContainer"></div>
+        <div class="map-actions">
+          <button class="map-btn location" id="detailLocationBtn">
+            <i class="fa-solid fa-location-crosshairs"></i> Usar mi ubicación
+          </button>
+          <button class="map-btn gmaps" id="gmapsBtn">
+            <i class="fa-brands fa-google"></i> Abrir en Google Maps
+          </button>
+        </div>
+        <div class="distance-info" id="distanceInfo">
+          <p id="distanceText"></p>
+        </div>
+        <div class="map-status" id="mapStatus"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <i class="toast-icon" id="toastIcon"></i>
+    <span id="toastMessage"></span>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Scripts del proyecto -->
+  <script src="js/data.js"></script>
+  <script src="js/location.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
