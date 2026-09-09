@@ -23,22 +23,43 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ---------- Renderizado de Tarjetas ----------
+// ---------- Renderizado de Tarjetas ----------
 function renderCards() {
   const grid = document.getElementById('cardsGrid');
   const noResults = document.getElementById('noResults');
 
   if (!grid) return;
 
-  // Filtrar células
   let filtered = celulas.filter(c => {
     const matchesFilter = currentFilter === 'todos' || c.dia === currentFilter;
-    const searchLower = currentSearch.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-    const nombreNormalized = c.nombre.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-    const diaNormalized = c.dia.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-    const dirNormalized = c.direccion.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-    const refNormalized = c.referencia.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
-    const matchesSearch = !searchLower ||
+    const searchLower = currentSearch
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    const nombreNormalized = c.nombre
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    const diaNormalized = c.dia
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    const dirNormalized = c.direccion
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    const refNormalized = c.referencia
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    const matchesSearch =
+      !searchLower ||
       nombreNormalized.includes(searchLower) ||
       diaNormalized.includes(searchLower) ||
       dirNormalized.includes(searchLower) ||
@@ -58,11 +79,12 @@ function renderCards() {
       if (distA === null && distB === null) return 0;
       if (distA === null) return 1;
       if (distB === null) return -1;
+
       return distA - distB;
     });
   }
 
-  // Mostrar/ocultar mensaje de sin resultados
+  // Sin resultados
   if (filtered.length === 0) {
     grid.innerHTML = '';
     noResults.style.display = 'block';
@@ -71,57 +93,203 @@ function renderCards() {
 
   noResults.style.display = 'none';
 
-  // Generar HTML de tarjetas
+  // Generar tarjetas
   grid.innerHTML = filtered.map((c, index) => {
     const dist = getDistanceToCelula(c);
+
     const distHtml = dist !== null
-      ? `<div class="distance-badge visible"><i class="fa-solid fa-location-arrow"></i> ${formatDistance(dist)}</div>`
+      ? `
+        <div class="distance-badge visible">
+          <i class="fa-solid fa-location-arrow"></i>
+          ${formatDistance(dist)}
+        </div>
+      `
       : '';
 
     const horaFormateada = formatTime(c.hora);
+
     const direccionCorta = c.direccion.length > 55
       ? c.direccion.substring(0, 55) + '...'
       : c.direccion;
 
+    const contactosHtml = c.contactos.map(num => {
+      const mensaje = encodeURIComponent(
+        'Hola, quisiera obtener información sobre la célula.'
+      );
+
+      const waLink = `https://wa.me/591${num}?text=${mensaje}`;
+
+      return `
+        <div class="card-contact">
+          <div class="card-contact-number">
+            <i class="fa-solid fa-phone"></i>
+            +591 ${formatPhone(num)}
+          </div>
+
+          <div class="card-contact-actions">
+            <a
+              href="${waLink}"
+              target="_blank"
+              class="card-action whatsapp"
+              title="Enviar WhatsApp"
+              onclick="event.stopPropagation();"
+            >
+              <i class="fa-brands fa-whatsapp"></i>
+              WhatsApp
+            </a>
+
+            <a
+              href="tel:+591${num}"
+              class="card-action call"
+              title="Llamar"
+              onclick="event.stopPropagation();"
+            >
+              <i class="fa-solid fa-phone"></i>
+              Llamar
+            </a>
+          </div>
+        </div>
+      `;
+    }).join('');
+
     return `
-      <article class="celula-card" data-color="${c.color}" onclick="openDetail(${c.id})" style="animation-delay: ${index * 0.05}s">
-        ${distHtml}
-        <div class="card-header">
-          <div class="card-title">Célula ${c.nombre}</div>
-          <div class="card-members">
-            <i class="fa-solid fa-users"></i> ${c.contactos.length} contactos disponibles
+  <article 
+    class="celula-card" 
+    data-color="${c.color}" 
+    style="animation-delay: ${index * 0.05}s"
+  >
+    ${distHtml}
+
+    <div class="card-header">
+      <div class="card-title">
+        Célula ${c.nombre}
+      </div>
+
+      <div class="card-members">
+        <i class="fa-solid fa-users"></i>
+        ${c.contactos.length} contactos disponibles
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      <!-- HORARIO -->
+      <div class="info-row">
+        <div class="info-icon ${c.color}">
+          <i class="fa-regular fa-clock"></i>
+        </div>
+
+        <div>
+          <div class="info-label">Horario</div>
+          <div class="info-text">
+            ${c.dia} · ${horaFormateada}
           </div>
         </div>
-        <div class="card-body">
-          <div class="info-row">
-            <div class="info-icon ${c.color}">
-              <i class="fa-regular fa-calendar"></i>
-            </div>
-            <div class="info-text">
-              ${c.dia}
-              <small><i class="fa-regular fa-clock"></i> ${horaFormateada}</small>
-            </div>
-          </div>
-          <div class="info-row">
-            <div class="info-icon ${c.color}">
-              <i class="fa-solid fa-location-dot"></i>
-            </div>
-            <div class="info-text">${direccionCorta}</div>
-          </div>
-          <div class="info-row">
-            <div class="info-icon ${c.color}">
-              <i class="fa-solid fa-map-pin"></i>
-            </div>
-            <div class="info-text">${c.referencia}</div>
+      </div>
+
+      <!-- DIRECCIÓN -->
+      <div class="info-row">
+        <div class="info-icon ${c.color}">
+          <i class="fa-solid fa-location-dot"></i>
+        </div>
+
+        <div>
+          <div class="info-label">Dirección</div>
+          <div class="info-text">
+            ${c.direccion}
           </div>
         </div>
-        <div class="card-footer">
-          <button class="btn-ver ${c.color}">
-            Ver detalles <i class="fa-solid fa-arrow-right"></i>
-          </button>
+      </div>
+
+      <!-- REFERENCIA -->
+      <div class="info-row">
+        <div class="info-icon ${c.color}">
+          <i class="fa-solid fa-map-pin"></i>
         </div>
-      </article>
-    `;
+
+        <div>
+          <div class="info-label">Referencia</div>
+          <div class="info-text">
+            ${c.referencia}
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACTOS -->
+      <div class="card-members" style="margin: 22px 0 12px;">
+        <i class="fa-solid fa-address-book"></i>
+        Contactos
+      </div>
+
+      <ul class="contact-list">
+
+        ${c.contactos.map(num => {
+
+          const mensaje = encodeURIComponent(
+            'Hola, quisiera obtener información sobre la célula.'
+          );
+
+          const waLink = `https://wa.me/591${num}?text=${mensaje}`;
+
+          return `
+            <li class="contact-item">
+
+              <span class="contact-number">
+                <i class="fa-solid fa-mobile-screen"></i>
+                +591 ${formatPhone(num)}
+              </span>
+
+              <div class="contact-actions">
+
+                <!-- WHATSAPP -->
+                <a
+                  class="action-btn whatsapp"
+                  href="${waLink}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Enviar WhatsApp"
+                >
+                  <i class="fa-brands fa-whatsapp"></i>
+                </a>
+
+                <!-- LLAMAR -->
+                <a
+                  class="action-btn call"
+                  href="tel:+591${num}"
+                  title="Llamar"
+                >
+                  <i class="fa-solid fa-phone"></i>
+                </a>
+
+              </div>
+
+            </li>
+          `;
+
+        }).join('')}
+
+      </ul>
+
+    </div>
+
+    <!-- IR A UBICACIÓN -->
+    <div class="card-footer">
+
+      <a
+        href="${c.link}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-ver ${c.color}"
+        style="text-decoration: none;"
+      >
+        <i class="fa-solid fa-location-arrow"></i>
+        Ir a la ubicación
+      </a>
+
+    </div>
+
+  </article>
+`;
   }).join('');
 }
 

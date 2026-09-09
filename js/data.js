@@ -22,8 +22,9 @@ const celulas = [
     direccion: "Calle 20 de Octubre, casi esquina JJ Pérez, lado Aduana, piso 2, oficina 203",
     referencia: "A una cuadra del atrio de la UMSA",
     contactos: ["70672168", "70578836", "65616691"],
-    latitud: null,   // ← Agregar coordenada cuando se conozca
-    longitud: null,  // ← Agregar coordenada cuando se conozca
+    latitud: -16.5065733,
+    longitud: -68.1303892,
+    link: "https://maps.app.goo.gl/hx2ewBGyVt7zH6AW9",
     color: "pink",
     hex: "#e91e63"
   },
@@ -35,8 +36,9 @@ const celulas = [
     direccion: "A una cuadra de la Plaza del Estudiante",
     referencia: "Cerca de la Plaza del Estudiante, La Paz",
     contactos: ["69965864", "73709294"],
-    latitud: null,
-    longitud: null,
+    latitud: -16.503955,
+    longitud: -68.131307,
+    link: "https://maps.app.goo.gl/Mph9w2HQWe2Af9J58",
     color: "teal",
     hex: "#00bcd4"
   },
@@ -48,8 +50,9 @@ const celulas = [
     direccion: "Entre Calle Chuquisaca y Av. América, Imprenta Lingraf",
     referencia: "A una cuadra de la Plaza Alonso de Mendoza",
     contactos: ["77727300", "62342955"],
-    latitud: null,
-    longitud: null,
+    latitud: -16.4930005,
+    longitud: -68.1397786,
+    link: "https://maps.app.goo.gl/28J4r3oRQyBmE4Jw9",
     color: "orange",
     hex: "#ff9800"
   },
@@ -61,8 +64,9 @@ const celulas = [
     direccion: "El Tejar, Calle Silverio Menacho 1749",
     referencia: "Zona El Tejar, La Paz",
     contactos: ["60673165", "67082949", "73049635"],
-    latitud: null,
-    longitud: null,
+    latitud: -16.4982917,
+    longitud: -68.1569467,
+    link: "https://maps.app.goo.gl/3TSa9U1jL98z41Ux6?g_st=aw",
     color: "purple",
     hex: "#9c27b0"
   },
@@ -74,8 +78,9 @@ const celulas = [
     direccion: "Entre la Calle México y Colombia, Edif. México, Dep. 1501",
     referencia: "Edificio México, Departamento 1501",
     contactos: ["78950892", "78884336", "63247443"],
-    latitud: null,
-    longitud: null,
+    latitud: -16.501157,
+    longitud: -68.134470,
+    link: "https://maps.app.goo.gl/ZUinnGR9Mq93iLPV6",
     color: "green",
     hex: "#4caf50"
   }
