@@ -88,7 +88,7 @@ const celulas = [
     id: 6,
     tipo: "nota",
     nombre: "✨¿No puedes ninguno de estos días? ¡No te preocupes! ",
-    mensaje: "💛Queremos encontrar un día que te quede cómodo y puedas asistir 😊 Escríbenos y cuéntanos qué día de la semana podrías acompañarnos. 🙌✨",
+    mensaje: "💛Queremos encontrar un día que te quede cómodo y puedas asistir Escríbenos al 73028506 - 73207018 y cuéntanos qué día de la semana podrías acompañarnos. 🙌✨",
     contactos: ["73028506 "," 73207018"],
     color: "white",
     hex: "#ffffff"
